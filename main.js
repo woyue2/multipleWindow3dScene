@@ -1,6 +1,7 @@
 import WindowManager from './WindowManager.js'
+// generate by copilot Nov28
 
-
+// 引入WindowManager模块
 
 const t = THREE;
 let camera, scene, renderer, world;
@@ -21,7 +22,7 @@ let internalTime = getTime();
 let windowManager;
 let initialized = false;
 
-// get time in seconds since beginning of the day (so that all windows use the same time)
+// 获取从当天开始到现在的秒数（以确保所有窗口使用相同的时间）
 function getTime ()
 {
 	return (new Date().getTime() - today) / 1000.0;
@@ -34,7 +35,7 @@ if (new URLSearchParams(window.location.search).get("clear"))
 }
 else
 {	
-	// this code is essential to circumvent that some browsers preload the content of some pages before you actually hit the url
+	// 这段代码是为了绕过某些浏览器在实际点击网址之前预加载某些页面内容的问题
 	document.addEventListener("visibilitychange", () => 
 	{
 		if (document.visibilityState != 'hidden' && !initialized)
@@ -54,7 +55,7 @@ else
 	{
 		initialized = true;
 
-		// add a short timeout because window.offsetX reports wrong values before a short period 
+		// 延迟一段时间，因为在短时间内，window.offsetX会报告错误的值
 		setTimeout(() => {
 			setupScene();
 			setupWindowManager();
@@ -93,13 +94,13 @@ else
 		windowManager.setWinShapeChangeCallback(updateWindowShape);
 		windowManager.setWinChangeCallback(windowsUpdated);
 
-		// here you can add your custom metadata to each windows instance
+		// 在这里可以为每个窗口实例添加自定义元数据
 		let metaData = {foo: "bar"};
 
-		// this will init the windowmanager and add this window to the centralised pool of windows
+		// 这将初始化窗口管理器并将此窗口添加到集中的窗口池中
 		windowManager.init(metaData);
 
-		// call update windows initially (it will later be called by the win change callback)
+		// 调用update windows进行初始更新（稍后会由win change callback调用）
 		windowsUpdated();
 	}
 
@@ -112,14 +113,14 @@ else
 	{
 		let wins = windowManager.getWindows();
 
-		// remove all cubes
+		// 删除所有立方体
 		cubes.forEach((c) => {
 			world.remove(c);
 		})
 
 		cubes = [];
 
-		// add new cubes based on the current window setup
+		// 根据当前窗口设置添加新的立方体
 		for (let i = 0; i < wins.length; i++)
 		{
 			let win = wins[i];
@@ -139,7 +140,7 @@ else
 
 	function updateWindowShape (easing = true)
 	{
-		// storing the actual offset in a proxy that we update against in the render function
+		// 将实际偏移存储在代理中，我们在渲染函数中根据其更新
 		sceneOffsetTarget = {x: -window.screenX, y: -window.screenY};
 		if (!easing) sceneOffset = sceneOffsetTarget;
 	}
@@ -152,19 +153,19 @@ else
 		windowManager.update();
 
 
-		// calculate the new position based on the delta between current offset and new offset times a falloff value (to create the nice smoothing effect)
+		// 根据当前偏移量和新偏移量之间的差值乘以一个衰减值（以创建漂亮的平滑效果）来计算新的位置
 		let falloff = .05;
 		sceneOffset.x = sceneOffset.x + ((sceneOffsetTarget.x - sceneOffset.x) * falloff);
 		sceneOffset.y = sceneOffset.y + ((sceneOffsetTarget.y - sceneOffset.y) * falloff);
 
-		// set the world position to the offset
+		// 将世界的位置设置为偏移量
 		world.position.x = sceneOffset.x;
 		world.position.y = sceneOffset.y;
 
 		let wins = windowManager.getWindows();
 
 
-		// loop through all our cubes and update their positions based on current window positions
+		// 遍历所有立方体，根据当前窗口位置更新它们的位置
 		for (let i = 0; i < cubes.length; i++)
 		{
 			let cube = cubes[i];
@@ -184,7 +185,7 @@ else
 	}
 
 
-	// resize the renderer to fit the window size
+	// 将渲染器大小调整为窗口大小
 	function resize ()
 	{
 		let width = window.innerWidth;
